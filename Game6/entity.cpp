@@ -4,7 +4,7 @@ Entity::Entity(std::size_t id) : id(id)
 {
 }
 
-uint32_t Entity::get_id()
+std::size_t Entity::get_id()
 {
 	return id;
 }

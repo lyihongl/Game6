@@ -30,7 +30,7 @@ struct index_in_tuple{
 };
 
 template<typename T>
-using componentIndex = index_in_tuple<T, EntityComponentVectorTuple>;
+using componentIndex = index_in_tuple<std::vector<T>, EntityComponentVectorTuple>;
 
 
 class ComponentPool{

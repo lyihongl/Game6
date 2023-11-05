@@ -160,6 +160,8 @@ int main(int argc, char **argv) {
     int mX = 0, mY = 0;
     EntityManager em{};
     Entity e = em.addEntity("A");
+    Physics2D p{};
+    e.setComponent<Physics2D>(p);
 
     while (!quit) {
         uint32_t now = SDL_GetTicks();
