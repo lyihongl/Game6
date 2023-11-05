@@ -5,10 +5,10 @@
 
 class Entity{
     std::size_t id;
-    public:
-        Entity(std::size_t id);
-    //uint32_t get_id();
-    //const std::string &getTag(size_t id);
+public:
+    Entity(std::size_t id);
+    uint32_t get_id();
+    const std::string &getTag(size_t id);
 
     template<typename T>
     T& getComponent(size_t id) {

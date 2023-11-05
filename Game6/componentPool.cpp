@@ -1,6 +1,6 @@
 #include "inc/componentPool.hpp"
 
-ComponentPool::ComponentPool(size_t max_size) : numEntities(max_size), tags(max_size), active(max_size, false), componentActive(max_size, 0) {
+ComponentPool::ComponentPool(size_t max_size) : numEntities(max_size), tags(max_size), active(max_size, false), componentActive(max_size) {
 	pool = {
 		std::vector<Physics2D>(max_size),
 		std::vector<Collider2D>(max_size)

@@ -154,7 +154,6 @@
     <ClCompile Include="resource.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="component.hpp" />
     <ClInclude Include="EntityManager.hpp" />
     <ClInclude Include="inc\componentPool.hpp" />
     <ClInclude Include="inc\components\collider2d.hpp" />

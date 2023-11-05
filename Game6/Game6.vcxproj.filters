@@ -101,9 +101,6 @@
     <ClInclude Include="EntityManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="component.hpp">
-      <Filter>Header Files\components</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fieldLines.frag">
