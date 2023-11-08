@@ -152,9 +152,11 @@
     <ClCompile Include="quad.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="resource.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
+    <None Include="..\.gitignore" />
     <None Include="shaders\fieldLines.frag" />
     <None Include="shaders\triagShader.frag" />
     <None Include="shaders\triagShader.vert" />
@@ -172,6 +174,11 @@
     <ClInclude Include="inc\quad.hpp" />
     <ClInclude Include="inc\render.hpp" />
     <ClInclude Include="inc\resource.hpp" />
+    <ClInclude Include="inc\Sprite.hpp" />
+    <ClInclude Include="inc\SpriteSheet.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

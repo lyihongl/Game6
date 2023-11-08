@@ -2,6 +2,7 @@
 #include "inc/render.hpp"
 #include "inc/grid.hpp"
 #include "inc/EntityManager.hpp"
+#include "inc/SpriteSheet.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -10,6 +11,7 @@
 #include <queue>
 #include <windows.h>
 #include <cmath>
+#include <filesystem>
 
 #define GLM_FORCE_RADIANS 1
 #include <SDL.h>
@@ -18,6 +20,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 const int SCREEN_FULLSCREEN = 0;
 const uint32_t SCREEN_WIDTH = 1280;
@@ -82,6 +87,7 @@ void init_screen(const char *caption) {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glEnable(GL_MULTISAMPLE);
+
 
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
@@ -162,6 +168,10 @@ int main(int argc, char **argv) {
     Entity e = em.addEntity("A");
     Physics2D p{};
     e.setComponent<Physics2D>(p);
+
+    SpriteSheet sheet{"./res/container.jpg"};
+    //std::cout << "sheet: " << stbi_failure_reason() << std::endl;
+    std::cout << "sheet width: " << sheet.width << std::endl;
 
     while (!quit) {
         uint32_t now = SDL_GetTicks();
