@@ -19,4 +19,10 @@ public:
     void setComponent(const T& c) {
         ComponentPool::Instance().setComponent<T>(id, c);
     }
+
+    template<typename T>
+    void setComponent(const T&& c) {
+        ComponentPool::Instance().setComponent<T>(id, std::forward<const T>(c));
+    }
+
 };

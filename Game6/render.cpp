@@ -21,43 +21,43 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
     uint32_t draw_N = 0;
 
     for (const Quad &q : quad) {
-        vertices.push_back(q.topLeft().first);
-        vertices.push_back(q.topLeft().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
+        //vertices.push_back(q.topLeft().first);
+        //vertices.push_back(q.topLeft().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
 
-        vertices.push_back(q.topRight().first);
-        vertices.push_back(q.topRight().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
+        //vertices.push_back(q.topRight().first);
+        //vertices.push_back(q.topRight().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
 
-        vertices.push_back(q.bottomLeft().first);
-        vertices.push_back(q.bottomLeft().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
+        //vertices.push_back(q.bottomLeft().first);
+        //vertices.push_back(q.bottomLeft().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
 
 
-        vertices.push_back(q.bottomRight().first);
-        vertices.push_back(q.bottomRight().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
+        //vertices.push_back(q.bottomRight().first);
+        //vertices.push_back(q.bottomRight().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
 
-        vertices.push_back(q.topRight().first);
-        vertices.push_back(q.topRight().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
+        //vertices.push_back(q.topRight().first);
+        //vertices.push_back(q.topRight().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
 
-        vertices.push_back(q.bottomLeft().first);
-        vertices.push_back(q.bottomLeft().second);
-        vertices.push_back(q.x);
-        vertices.push_back(q.y);
-        vertices.push_back(q.rad);
-        draw_N+=2;
+        //vertices.push_back(q.bottomLeft().first);
+        //vertices.push_back(q.bottomLeft().second);
+        //vertices.push_back(q.x);
+        //vertices.push_back(q.y);
+        //vertices.push_back(q.rad);
+        //draw_N+=2;
     }
 
     glBindVertexArray(VAO);

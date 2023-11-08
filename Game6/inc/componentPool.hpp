@@ -2,6 +2,7 @@
 #include "components/physics2d.hpp"
 #include "components/collider2d.hpp"
 #include "quad.hpp"
+#include "Sprite.hpp"
 #include <cstdlib>
 #include <tuple>
 #include <vector>
@@ -11,7 +12,8 @@
 typedef std::tuple<
     std::vector<Physics2D>,
     std::vector<Collider2D>,
-    std::vector<Quad>
+    std::vector<Quad>,
+    std::vector<Sprite>
 > EntityComponentVectorTuple;
 
 template< size_t I, typename T, typename Tuple_t>

@@ -3,7 +3,7 @@ struct Physics2D{
     float x, y;
     float vx, vy;
     float ax, ay;
-    float rad;
+    float rad, vrad, arad;
 public:
     Physics2D();
     void reset();

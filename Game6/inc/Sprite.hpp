@@ -1,11 +1,14 @@
 #pragma once
 #include "SpriteSheet.hpp"
+#include <memory>
 
 class Sprite
 {
-	const SpriteSheet& sheet;
+	const std::weak_ptr<SpriteSheet> sheet;
 	int x, y, w, h;
 public:
-	Sprite(SpriteSheet& sheet, unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+	Sprite();
+	Sprite(std::shared_ptr<SpriteSheet>& sheet, int x, int y, int w, int h);
+	Sprite& operator=(const Sprite&);
 };
 

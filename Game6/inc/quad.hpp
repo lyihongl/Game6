@@ -6,13 +6,11 @@ class Quad {
     public:
     float w;
     float h;
-    float x;
-    float y;
-    float rad;
+    //float rad;
     Quad();
-    Quad(float w, float h, float x, float y, float rad);
-    std::pair<float, float> topLeft() const;
-    std::pair<float, float> topRight() const; 
-    std::pair<float, float> bottomRight() const; 
-    std::pair<float, float> bottomLeft() const; 
+    Quad(float w, float h);
+    //std::pair<float, float> topLeft() const;
+    //std::pair<float, float> topRight() const; 
+    //std::pair<float, float> bottomRight() const; 
+    //std::pair<float, float> bottomLeft() const; 
 };

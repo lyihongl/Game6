@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
     SDL_Event event;
     bool quit = false;
     bool be_nice_and_dont_burn_the_cpu = true;
-    Uint32 minimum_fps_delta_time = (1000 / 60);
+    float minimum_fps_delta_time = (1000.f / 60.f);
     Uint32 last_game_step = SDL_GetTicks(); // initial value
     Uint32 wait_time = 0;
 
@@ -123,42 +123,42 @@ int main(int argc, char **argv) {
     Empire rome{};
     Render render{SCREEN_WIDTH, SCREEN_HEIGHT};
     std::vector<Quad> quads;
-    quads.push_back(Quad{50, 50, 100, 100, 0});
+    quads.push_back(Quad{100, 100});
     Shader s{"./shaders/triagShader.vert", "./shaders/triagShader.frag"};
     Shader field{"./shaders/triagShader.vert", "./shaders/fieldLines.frag"};
 
-    std::vector<std::vector<int>> grid1(36, std::vector<int>(64, 0));
+    //std::vector<std::vector<int>> grid1(36, std::vector<int>(64, 0));
 
-    std::vector<std::vector<unsigned int>> blocked(
-        36, std::vector<unsigned int>(64, 0));
-    blocked[0][20] = 1;
-    blocked[1][20] = 1;
-    blocked[2][20] = 1;
-    blocked[3][20] = 1;
-    blocked[4][20] = 1;
-    blocked[0][21] = 1;
-    blocked[1][21] = 1;
-    blocked[2][21] = 1;
-    blocked[3][21] = 1;
-    blocked[4][21] = 1;
-    std::vector<Quad> quads2;
-    for (int i = 0; i < blocked.size(); i++) {
-        for (int j = 0; j < blocked[0].size(); j++) {
-            if (blocked[i][j]) {
-                quads2.push_back(Quad{20, 20, static_cast<float>(j * 20 + 10),
-                                      static_cast<float>(i * 20 + 10), 0});
-            }
-        }
-    }
-    std::vector<Quad> quads3;
-    for (int i = 0; i < blocked.size(); i++) {
-        for (int j = 0; j < blocked[0].size(); j++) {
-            if (!blocked[i][j]) {
-                quads3.push_back(Quad{18, 2, static_cast<float>(j * 20 + 10),
-                                      static_cast<float>(i * 20 + 9), 0});
-            }
-        }
-    }
+    //std::vector<std::vector<unsigned int>> blocked(
+    //    36, std::vector<unsigned int>(64, 0));
+    //blocked[0][20] = 1;
+    //blocked[1][20] = 1;
+    //blocked[2][20] = 1;
+    //blocked[3][20] = 1;
+    //blocked[4][20] = 1;
+    //blocked[0][21] = 1;
+    //blocked[1][21] = 1;
+    //blocked[2][21] = 1;
+    //blocked[3][21] = 1;
+    //blocked[4][21] = 1;
+    //std::vector<Quad> quads2;
+    //for (int i = 0; i < blocked.size(); i++) {
+    //    for (int j = 0; j < blocked[0].size(); j++) {
+    //        if (blocked[i][j]) {
+    //            quads2.push_back(Quad{20, 20, static_cast<float>(j * 20 + 10),
+    //                                  static_cast<float>(i * 20 + 10), 0});
+    //        }
+    //    }
+    //}
+    //std::vector<Quad> quads3;
+    //for (int i = 0; i < blocked.size(); i++) {
+    //    for (int j = 0; j < blocked[0].size(); j++) {
+    //        if (!blocked[i][j]) {
+    //            quads3.push_back(Quad{18, 2, static_cast<float>(j * 20 + 10),
+    //                                  static_cast<float>(i * 20 + 9), 0});
+    //        }
+    //    }
+    //}
 
     std::vector<std::vector<std::pair<float, float>>> grid2(
         36, std::vector<std::pair<float, float>>(64, {0.0f, 0.0f}));
@@ -166,12 +166,18 @@ int main(int argc, char **argv) {
     int mX = 0, mY = 0;
     EntityManager em{};
     Entity e = em.addEntity("A");
-    Physics2D p{};
-    e.setComponent<Physics2D>(p);
 
-    SpriteSheet sheet{"./res/container.jpg"};
-    //std::cout << "sheet: " << stbi_failure_reason() << std::endl;
-    std::cout << "sheet width: " << sheet.width << std::endl;
+    std::shared_ptr<SpriteSheet> sheet = std::make_shared<SpriteSheet>("./res/container.jpg");
+    Sprite sprite{ sheet, 0, 0, sheet->width, sheet->height };
+
+    std::cout << "sheet width: " << sheet->width << std::endl;
+
+    Physics2D p{};
+    p.x = 50;
+    p.y = 50;
+    e.setComponent<Physics2D>(p);
+    e.setComponent<Quad>({ 100, 100 });
+    e.setComponent<Sprite>(sprite);
 
     while (!quit) {
         uint32_t now = SDL_GetTicks();
@@ -203,7 +209,7 @@ int main(int argc, char **argv) {
             }
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            // std::cout << "fps: " << (1000.f / delta_time) << "\n";
+            std::cout << "fps: " << (1000.f / delta_time) << "\n";
             ticks++;
             SDL_GetMouseState(&mX, &mY);
             unsigned int gridX = mX / 20;

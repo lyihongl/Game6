@@ -4,7 +4,8 @@ ComponentPool::ComponentPool(size_t max_size) : numEntities(max_size), tags(max_
 	pool = {
 		std::vector<Physics2D>(max_size),
 		std::vector<Collider2D>(max_size),
-		std::vector<Quad>(max_size)
+		std::vector<Quad>(max_size),
+		std::vector<Sprite>(max_size)
 	};
 }
 
