@@ -1,4 +1,4 @@
-#include "EntityManager.hpp"
+#include "inc/EntityManager.hpp"
 #include "inc/componentPool.hpp"
 
 Entity EntityManager::addEntity(const std::string& tag)

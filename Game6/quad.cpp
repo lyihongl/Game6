@@ -1,5 +1,9 @@
 #include "inc/quad.hpp"
 
+Quad::Quad():x(0),y(0),w(0),h(0),rad(0)
+{
+}
+
 Quad::Quad(float w, float h, float x, float y, float rad)
     : x(x), y(y), w(w), h(h), rad(rad) {
 }

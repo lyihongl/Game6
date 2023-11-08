@@ -1,7 +1,7 @@
 #include "inc/empire.hpp"
 #include "inc/render.hpp"
 #include "inc/grid.hpp"
-#include "EntityManager.hpp"
+#include "inc/EntityManager.hpp"
 
 #include <cstdio>
 #include <cstdlib>

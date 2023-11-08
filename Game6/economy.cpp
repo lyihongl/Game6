@@ -17,7 +17,7 @@ Economy::Economy(Economy &e){
 
 }
 
-Economy::Economy(Economy &&e){
+Economy::Economy(Economy &&e) noexcept{
 
 }
 

@@ -140,21 +140,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\Dev\glad\src\glad.c" />
+    <ClCompile Include="collider2d.cpp" />
     <ClCompile Include="componentPool.cpp" />
     <ClCompile Include="economy.cpp" />
     <ClCompile Include="empire.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="grid.cpp" />
-    <ClCompile Include="inc\components\collider2d.cpp" />
-    <ClCompile Include="inc\components\physics2d.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="physics2d.cpp" />
     <ClCompile Include="quad.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="resource.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EntityManager.hpp" />
+    <None Include=".gitignore" />
+    <None Include="shaders\fieldLines.frag" />
+    <None Include="shaders\triagShader.frag" />
+    <None Include="shaders\triagShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="inc\componentPool.hpp" />
     <ClInclude Include="inc\components\collider2d.hpp" />
     <ClInclude Include="inc\components\physics2d.hpp" />
@@ -162,16 +167,11 @@
     <ClInclude Include="inc\economy.hpp" />
     <ClInclude Include="inc\empire.hpp" />
     <ClInclude Include="inc\entity.hpp" />
+    <ClInclude Include="inc\EntityManager.hpp" />
     <ClInclude Include="inc\grid.hpp" />
     <ClInclude Include="inc\quad.hpp" />
     <ClInclude Include="inc\render.hpp" />
     <ClInclude Include="inc\resource.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".gitignore" />
-    <None Include="shaders\fieldLines.frag" />
-    <None Include="shaders\triagShader.frag" />
-    <None Include="shaders\triagShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,6 +9,7 @@ class Quad {
     float x;
     float y;
     float rad;
+    Quad();
     Quad(float w, float h, float x, float y, float rad);
     std::pair<float, float> topLeft() const;
     std::pair<float, float> topRight() const; 
