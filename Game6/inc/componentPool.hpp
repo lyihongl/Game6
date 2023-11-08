@@ -55,6 +55,11 @@ class ComponentPool{
         return std::get<std::vector<T>>(pool)[id];
     }
 
+    template <typename T>
+    bool getComponentActive(size_t id) {
+        return componentActive[id][componentIndex<T>::value];
+    }
+
     template<typename T>
     void activateComponent(size_t id) {
         componentActive[id][componentIndex<T>::value] = true;

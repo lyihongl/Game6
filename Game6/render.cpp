@@ -86,3 +86,36 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
     glUniform1i(glGetUniformLocation(sProgram.ID, "w"), screen_w);
     glDrawArrays(GL_TRIANGLES, 0, draw_N*3);
 }
+
+void Render::renderEntity(const std::vector<Entity>& entities, const Shader& program)
+{
+    std::vector<float> data;
+    std::vector<glm::vec2> corners = {
+        {-1.f, -1.f},
+        {-1.f, +1.f},
+        {+1.f, -1.f},
+        {+1.f, +1.f}
+    };
+    for (const Entity& e : entities) {
+        if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() && e.hasComponent<Physics2D>()) {
+            for (const auto& corner : corners) {
+				data.push_back(corner.x); // x offset
+				data.push_back(corner.y); // y offset
+
+				data.push_back(e.getComponent<Quad>().w);
+				data.push_back(e.getComponent<Quad>().h);
+
+				data.push_back(e.getComponent<Physics2D>().x);
+				data.push_back(e.getComponent<Physics2D>().y);
+
+				data.push_back(e.getComponent<Sprite>().x);
+				data.push_back(e.getComponent<Sprite>().y);
+				data.push_back(e.getComponent<Sprite>().w);
+				data.push_back(e.getComponent<Sprite>().h);
+
+                data.push_back(e.getComponent<Sprite>().sheet.lock()->width);
+                data.push_back(e.getComponent<Sprite>().sheet.lock()->height);
+            }
+        }
+    }
+}

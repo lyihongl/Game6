@@ -11,8 +11,13 @@ public:
     const std::string &getTag(size_t id);
 
     template<typename T>
-    T& getComponent() {
+    T& getComponent() const {
         return ComponentPool::Instance().getComponent<T>(id);
+    }
+
+    template<typename T>
+    bool hasComponent() const {
+        return ComponentPool::Instance().getComponentActive(id);
     }
     
     template<typename T>

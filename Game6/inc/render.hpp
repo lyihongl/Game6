@@ -1,6 +1,7 @@
 #pragma once
 
 #include "quad.hpp"
+#include "entity.hpp"
 
 #include<vector>
 #include <shaders.hpp>
@@ -18,4 +19,5 @@ class Render {
     Render(Render &&) = delete;
     Render operator=(Render&) = delete;
     void renderQuad(const std::vector<Quad>&, const Shader&);
+    void renderEntity(const std::vector<Entity>&, const Shader&);
 };

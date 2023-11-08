@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <cmath>
 #include <filesystem>
+#include <chrono>
 
 #define GLM_FORCE_RADIANS 1
 #include <SDL.h>
@@ -105,7 +106,7 @@ int main(int argc, char **argv) {
     SDL_Event event;
     bool quit = false;
     bool be_nice_and_dont_burn_the_cpu = true;
-    float minimum_fps_delta_time = (1000.f / 60.f);
+    float minimum_fps_delta_time = (1000000.f / 60.f);
     Uint32 last_game_step = SDL_GetTicks(); // initial value
     Uint32 wait_time = 0;
 
@@ -179,8 +180,13 @@ int main(int argc, char **argv) {
     e.setComponent<Quad>({ 100, 100 });
     e.setComponent<Sprite>(sprite);
 
+    
+    auto start_time = std::chrono::high_resolution_clock::now();
+    auto end_time = std::chrono::high_resolution_clock::now();
     while (!quit) {
-        uint32_t now = SDL_GetTicks();
+        //uint32_t now = SDL_GetTicks();
+        auto delta_time =  end_time - start_time;
+        end_time = std::chrono::high_resolution_clock::now();
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
             case SDL_QUIT: {
@@ -196,20 +202,22 @@ int main(int argc, char **argv) {
             }
             }
         }
+        long long delta_time_us = std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count();
 
-        if (last_game_step + minimum_fps_delta_time < now) {
+        if (delta_time_us > minimum_fps_delta_time) {
             SDL_GL_SwapWindow(window);
 
-            Uint32 delta_time = now - last_game_step;
+            //Uint32 delta_time = now - last_game_step;
             // wait_time = std::min(0, minimum_fps_delta_time - delta_time);
 
-            if (delta_time > minimum_fps_delta_time) {
-                delta_time = minimum_fps_delta_time; // slow down if the
+            if (delta_time_us > minimum_fps_delta_time) {
+                delta_time_us = floor(minimum_fps_delta_time); // slow down if the
                                                      // computer is too slow
             }
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            std::cout << "fps: " << (1000.f / delta_time) << "\n";
+            std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
+            std::cout << "delta time: " <<  delta_time_us << "\n";
             ticks++;
             SDL_GetMouseState(&mX, &mY);
             unsigned int gridX = mX / 20;
@@ -251,7 +259,8 @@ int main(int argc, char **argv) {
 
             // RenderGame();
 
-            last_game_step = now;
+            //last_game_step = now;
+            start_time = std::chrono::high_resolution_clock::now();
         } else {
             // we're too fast, wait a bit.
             if (be_nice_and_dont_burn_the_cpu) {
