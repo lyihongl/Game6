@@ -94,8 +94,11 @@ void Render::renderEntity(const std::vector<Entity>& entities, const Shader& pro
         {-1.f, -1.f},
         {-1.f, +1.f},
         {+1.f, -1.f},
+        {-1.f, +1.f},
+        {+1.f, -1.f},
         {+1.f, +1.f}
     };
+    int vertices = 0;
     for (const Entity& e : entities) {
         if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() && e.hasComponent<Physics2D>()) {
             for (const auto& corner : corners) {
@@ -115,7 +118,42 @@ void Render::renderEntity(const std::vector<Entity>& entities, const Shader& pro
 
                 data.push_back(e.getComponent<Sprite>().sheet.lock()->width);
                 data.push_back(e.getComponent<Sprite>().sheet.lock()->height);
+                vertices += 2;
             }
         }
     }
+    glBindTexture(GL_TEXTURE_2D, entities[0].getComponent<Sprite>().sheet.lock()->textureId);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * data.size(),
+                 data.data(), GL_STATIC_DRAW);
+    // x offset y offset
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float) + 6*sizeof(int),
+                          (void *)0);
+    glEnableVertexAttribArray(0);
+
+    // width height
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float) + 6*sizeof(int),
+                          (void *)(2*sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // x y center
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(float) + 6*sizeof(int),
+                          (void *)(4*sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+
+    // sprite selection
+    glVertexAttribPointer(3, 4, GL_INT, GL_FALSE, 6 * sizeof(float) + 6*sizeof(int),
+                          (void *)(6*sizeof(float)));
+    glEnableVertexAttribArray(3);
+
+    glVertexAttribPointer(4, 2, GL_INT, GL_FALSE, 6 * sizeof(float) + 6*sizeof(int),
+                          (void *)(10*sizeof(float)));
+    glEnableVertexAttribArray(4);
+    program.Use();
+    // std::cout<<"screen_w: "<<screen_w<<std::endl;
+    glUniform1i(glGetUniformLocation(program.ID, "h"), screen_h);
+    glUniform1i(glGetUniformLocation(program.ID, "w"), screen_w);
+    glDrawArrays(GL_TRIANGLES, 0, vertices*3);
 }

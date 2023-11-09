@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="..\.gitignore" />
     <None Include="shaders\fieldLines.frag" />
+    <None Include="shaders\spriteTest.frag" />
+    <None Include="shaders\spriteTest.vert" />
     <None Include="shaders\triagShader.frag" />
     <None Include="shaders\triagShader.vert" />
   </ItemGroup>

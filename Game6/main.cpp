@@ -127,6 +127,7 @@ int main(int argc, char **argv) {
     quads.push_back(Quad{100, 100});
     Shader s{"./shaders/triagShader.vert", "./shaders/triagShader.frag"};
     Shader field{"./shaders/triagShader.vert", "./shaders/fieldLines.frag"};
+    Shader spriteShader{ "./shaders/spriteTest.vert", "./shaders/spriteTest.frag" };
 
     //std::vector<std::vector<int>> grid1(36, std::vector<int>(64, 0));
 
@@ -216,8 +217,8 @@ int main(int argc, char **argv) {
             }
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
-            std::cout << "delta time: " <<  delta_time_us << "\n";
+            //std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
+            //std::cout << "delta time: " <<  delta_time_us << "\n";
             ticks++;
             SDL_GetMouseState(&mX, &mY);
             unsigned int gridX = mX / 20;
@@ -260,6 +261,7 @@ int main(int argc, char **argv) {
             // RenderGame();
 
             //last_game_step = now;
+            render.renderEntity(em.entities, spriteShader);
             start_time = std::chrono::high_resolution_clock::now();
         } else {
             // we're too fast, wait a bit.

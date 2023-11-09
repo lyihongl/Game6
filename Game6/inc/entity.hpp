@@ -17,7 +17,7 @@ public:
 
     template<typename T>
     bool hasComponent() const {
-        return ComponentPool::Instance().getComponentActive(id);
+        return ComponentPool::Instance().getComponentActive<T>(id);
     }
     
     template<typename T>

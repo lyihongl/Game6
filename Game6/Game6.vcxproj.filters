@@ -81,6 +81,8 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="..\.gitignore" />
+    <None Include="shaders\spriteTest.vert" />
+    <None Include="shaders\spriteTest.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\componentPool.hpp">
