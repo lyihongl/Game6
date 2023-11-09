@@ -83,6 +83,7 @@
     <None Include="..\.gitignore" />
     <None Include="shaders\spriteTest.vert" />
     <None Include="shaders\spriteTest.frag" />
+    <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\componentPool.hpp">

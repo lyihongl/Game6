@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
+    <None Include=".clang-format" />
     <None Include="shaders\fieldLines.frag" />
     <None Include="shaders\spriteTest.frag" />
     <None Include="shaders\spriteTest.vert" />

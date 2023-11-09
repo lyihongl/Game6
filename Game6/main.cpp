@@ -89,14 +89,12 @@ void init_screen(const char *caption) {
     glDisable(GL_CULL_FACE);
     glEnable(GL_MULTISAMPLE);
 
-
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     SDL_GL_SetSwapInterval(0);
     glViewport(0, 0, w, h);
     glClearColor(0.0f, 0.5f, 1.0f, 0.0f);
 }
-
 
 int main(int argc, char **argv) {
     // std::cout<<Constants::getResource(Constants::ResourceIndex::WOOD).getName()<<std::endl;
@@ -127,40 +125,42 @@ int main(int argc, char **argv) {
     quads.push_back(Quad{100, 100});
     Shader s{"./shaders/triagShader.vert", "./shaders/triagShader.frag"};
     Shader field{"./shaders/triagShader.vert", "./shaders/fieldLines.frag"};
-    Shader spriteShader{ "./shaders/spriteTest.vert", "./shaders/spriteTest.frag" };
+    Shader spriteShader{"./shaders/spriteTest.vert",
+                        "./shaders/spriteTest.frag"};
 
-    //std::vector<std::vector<int>> grid1(36, std::vector<int>(64, 0));
+    // std::vector<std::vector<int>> grid1(36, std::vector<int>(64, 0));
 
-    //std::vector<std::vector<unsigned int>> blocked(
-    //    36, std::vector<unsigned int>(64, 0));
-    //blocked[0][20] = 1;
-    //blocked[1][20] = 1;
-    //blocked[2][20] = 1;
-    //blocked[3][20] = 1;
-    //blocked[4][20] = 1;
-    //blocked[0][21] = 1;
-    //blocked[1][21] = 1;
-    //blocked[2][21] = 1;
-    //blocked[3][21] = 1;
-    //blocked[4][21] = 1;
-    //std::vector<Quad> quads2;
-    //for (int i = 0; i < blocked.size(); i++) {
-    //    for (int j = 0; j < blocked[0].size(); j++) {
-    //        if (blocked[i][j]) {
-    //            quads2.push_back(Quad{20, 20, static_cast<float>(j * 20 + 10),
-    //                                  static_cast<float>(i * 20 + 10), 0});
-    //        }
-    //    }
-    //}
-    //std::vector<Quad> quads3;
-    //for (int i = 0; i < blocked.size(); i++) {
-    //    for (int j = 0; j < blocked[0].size(); j++) {
-    //        if (!blocked[i][j]) {
-    //            quads3.push_back(Quad{18, 2, static_cast<float>(j * 20 + 10),
-    //                                  static_cast<float>(i * 20 + 9), 0});
-    //        }
-    //    }
-    //}
+    // std::vector<std::vector<unsigned int>> blocked(
+    //     36, std::vector<unsigned int>(64, 0));
+    // blocked[0][20] = 1;
+    // blocked[1][20] = 1;
+    // blocked[2][20] = 1;
+    // blocked[3][20] = 1;
+    // blocked[4][20] = 1;
+    // blocked[0][21] = 1;
+    // blocked[1][21] = 1;
+    // blocked[2][21] = 1;
+    // blocked[3][21] = 1;
+    // blocked[4][21] = 1;
+    // std::vector<Quad> quads2;
+    // for (int i = 0; i < blocked.size(); i++) {
+    //     for (int j = 0; j < blocked[0].size(); j++) {
+    //         if (blocked[i][j]) {
+    //             quads2.push_back(Quad{20, 20, static_cast<float>(j * 20 +
+    //             10),
+    //                                   static_cast<float>(i * 20 + 10), 0});
+    //         }
+    //     }
+    // }
+    // std::vector<Quad> quads3;
+    // for (int i = 0; i < blocked.size(); i++) {
+    //     for (int j = 0; j < blocked[0].size(); j++) {
+    //         if (!blocked[i][j]) {
+    //             quads3.push_back(Quad{18, 2, static_cast<float>(j * 20 + 10),
+    //                                   static_cast<float>(i * 20 + 9), 0});
+    //         }
+    //     }
+    // }
 
     std::vector<std::vector<std::pair<float, float>>> grid2(
         36, std::vector<std::pair<float, float>>(64, {0.0f, 0.0f}));
@@ -169,8 +169,9 @@ int main(int argc, char **argv) {
     EntityManager em{};
     Entity e = em.addEntity("A");
 
-    std::shared_ptr<SpriteSheet> sheet = std::make_shared<SpriteSheet>("./res/container.jpg");
-    Sprite sprite{ sheet, 0, 0, sheet->width, sheet->height };
+    std::shared_ptr<SpriteSheet> sheet =
+        std::make_shared<SpriteSheet>("./res/container.jpg");
+    Sprite sprite{sheet, 0, 0, sheet->width, sheet->height};
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
@@ -178,15 +179,14 @@ int main(int argc, char **argv) {
     p.x = 50;
     p.y = 50;
     e.setComponent<Physics2D>(p);
-    e.setComponent<Quad>({ 100, 100 });
+    e.setComponent<Quad>({100, 100});
     e.setComponent<Sprite>(sprite);
 
-    
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = std::chrono::high_resolution_clock::now();
     while (!quit) {
-        //uint32_t now = SDL_GetTicks();
-        auto delta_time =  end_time - start_time;
+        // uint32_t now = SDL_GetTicks();
+        auto delta_time = end_time - start_time;
         end_time = std::chrono::high_resolution_clock::now();
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -203,30 +203,33 @@ int main(int argc, char **argv) {
             }
             }
         }
-        long long delta_time_us = std::chrono::duration_cast<std::chrono::microseconds>(delta_time).count();
+        long long delta_time_us =
+            std::chrono::duration_cast<std::chrono::microseconds>(delta_time)
+                .count();
 
         if (delta_time_us > minimum_fps_delta_time) {
             SDL_GL_SwapWindow(window);
 
-            //Uint32 delta_time = now - last_game_step;
-            // wait_time = std::min(0, minimum_fps_delta_time - delta_time);
+            // Uint32 delta_time = now - last_game_step;
+            //  wait_time = std::min(0, minimum_fps_delta_time - delta_time);
 
             if (delta_time_us > minimum_fps_delta_time) {
-                delta_time_us = floor(minimum_fps_delta_time); // slow down if the
-                                                     // computer is too slow
+                delta_time_us =
+                    floor(minimum_fps_delta_time); // slow down if the
+                                                   // computer is too slow
             }
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            //std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
-            //std::cout << "delta time: " <<  delta_time_us << "\n";
+            // std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
+            // std::cout << "delta time: " <<  delta_time_us << "\n";
             ticks++;
             SDL_GetMouseState(&mX, &mY);
             unsigned int gridX = mX / 20;
             unsigned int gridY = mY / 20;
             if (ticks % 5) {
                 // std::cout<<gridX<<": "<<gridY<<std::endl;
-                //GridUtil::bfs(grid1, blocked, gridX, gridY);
-                //GridUtil::compute_gradient_mtx(grid1, grid2);
+                // GridUtil::bfs(grid1, blocked, gridX, gridY);
+                // GridUtil::compute_gradient_mtx(grid1, grid2);
                 // for (const auto &row : grid1) {
                 //     for (const unsigned int &i : row) {
                 //         std::cout << i << " ";
@@ -237,7 +240,7 @@ int main(int argc, char **argv) {
                 // std::cout << std::endl;
             }
             // rome.simulate(ticks);
-            //for (Quad &q : quads) {
+            // for (Quad &q : quads) {
             //    // q.rad += 0.005;
             //    uint32_t quad_grid_x = q.x / 20;
             //    uint32_t quad_grid_y = q.y / 20;
@@ -246,7 +249,7 @@ int main(int argc, char **argv) {
             //    q.x += ax * 0.3;
             //    q.y += ay * 0.3;
             //}
-            //for (Quad &q : quads3) {
+            // for (Quad &q : quads3) {
             //    // q.rad += 0.005;
             //    uint32_t quad_grid_x = q.x / 20;
             //    uint32_t quad_grid_y = q.y / 20;
@@ -254,13 +257,13 @@ int main(int argc, char **argv) {
             //    const auto &[ax, ay] = grid2[quad_grid_y][quad_grid_x];
             //    q.rad = std::atan2(ay, ax);
             //}
-            //render.renderQuad(quads, s);
-            //render.renderQuad(quads2, s);
-            //render.renderQuad(quads3, field);
+            // render.renderQuad(quads, s);
+            // render.renderQuad(quads2, s);
+            // render.renderQuad(quads3, field);
 
             // RenderGame();
 
-            //last_game_step = now;
+            // last_game_step = now;
             render.renderEntity(em.entities, spriteShader);
             start_time = std::chrono::high_resolution_clock::now();
         } else {

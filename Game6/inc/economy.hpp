@@ -8,11 +8,11 @@ class Economy {
     public:
     std::unordered_map<std::string, uint32_t> resources;
 
-    Economy();   
-    Economy(Economy&);
-    Economy(Economy&&) noexcept;
-    Economy operator=(Economy&);
+    Economy();
+    Economy(Economy &);
+    Economy(Economy &&) noexcept;
+    Economy operator=(Economy &);
     ~Economy();
-    void produce(std::unordered_map<std::string, uint32_t>&);
+    void produce(std::unordered_map<std::string, uint32_t> &);
     void print() const;
 };
