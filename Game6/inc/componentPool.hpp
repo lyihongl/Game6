@@ -1,6 +1,7 @@
 #pragma once
 #include "components/physics2d.hpp"
 #include "components/collider2d.hpp"
+#include "components/Position2D.hpp"
 #include "quad.hpp"
 #include "Sprite.hpp"
 #include <cstdlib>
@@ -9,9 +10,15 @@
 #include <bitset>
 #include <string>
 
-typedef std::tuple<std::vector<Physics2D>, std::vector<Collider2D>,
-                   std::vector<Quad>, std::vector<Sprite>>
-    EntityComponentVectorTuple;
+// clang-format off
+typedef std::tuple<
+    std::vector<Position2D>,
+    std::vector<Physics2D>, 
+    std::vector<Collider2D>, 
+    std::vector<Quad>, 
+    std::vector<Sprite>
+> EntityComponentVectorTuple;
+// clang-format on
 
 template <size_t I, typename T, typename Tuple_t>
 constexpr size_t index_in_tuple_fn() {

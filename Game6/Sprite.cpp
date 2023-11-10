@@ -3,7 +3,7 @@
 Sprite::Sprite() : sheet(), x(0), y(0), w(0), h(0) {
 }
 
-Sprite::Sprite(std::shared_ptr<SpriteSheet> &sheet, int x, int y, int w, int h)
+Sprite::Sprite(std::shared_ptr<SpriteSheet> &sheet, float x, float y, float w, float h)
     : sheet(sheet), x(x), y(y), w(w), h(h)
 // gpu_tr(static_cast<float>(x) / sheet->width, static_cast<float>(y) /
 // sheet->height), gpu_tl((static_cast<float>(x) + w) / sheet->width,
@@ -19,7 +19,7 @@ const Sprite &Sprite::operator=(const Sprite &s) {
     x = s.x;
     y = s.y;
     w = s.w;
-    h = s.w;
+    h = s.h;
     // gpu_tr = glm::vec2(static_cast<float>(x) / sheet.lock()->width,
     // static_cast<float>(y) / sheet.lock()->height); gpu_tl =
     // glm::vec2((static_cast<float>(x) + w) / sheet.lock()->width,

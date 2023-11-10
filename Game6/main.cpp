@@ -168,19 +168,27 @@ int main(int argc, char **argv) {
     int mX = 0, mY = 0;
     EntityManager em{};
     Entity e = em.addEntity("A");
+    Entity b = em.addEntity("B");
 
     std::shared_ptr<SpriteSheet> sheet =
-        std::make_shared<SpriteSheet>("./res/container.jpg");
-    Sprite sprite{sheet, 0, 0, sheet->width, sheet->height};
+        std::make_shared<SpriteSheet>("./res/atlas.png");
+    Sprite sprite{sheet, 0.f, 0.f, static_cast<float>(sheet->width),
+                  static_cast<float>(sheet->height)};
+    Sprite sprite2{sheet, 0.f, 0.f, static_cast<float>(382),
+                   static_cast<float>(493)};
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
     Physics2D p{};
-    p.x = 50;
-    p.y = 50;
+    e.setComponent<Position2D>({100, 100});
     e.setComponent<Physics2D>(p);
     e.setComponent<Quad>({100, 100});
     e.setComponent<Sprite>(sprite);
+
+    b.setComponent<Position2D>({600, 600});
+    b.setComponent<Physics2D>(p);
+    b.setComponent<Quad>({96, 123});
+    b.setComponent<Sprite>(sprite2);
 
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = std::chrono::high_resolution_clock::now();

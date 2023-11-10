@@ -89,8 +89,17 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
 void Render::renderEntity(const std::vector<Entity> &entities,
                           const Shader &program) {
     std::vector<float> data;
-    std::vector<glm::vec2> corners = {{-1.f, -1.f}, {-1.f, +1.f}, {+1.f, -1.f},
-                                      {-1.f, +1.f}, {+1.f, -1.f}, {+1.f, +1.f}};
+
+    // clang-format off
+    std::vector<glm::vec2> corners = {
+        {-1.f, -1.f}, 
+        {-1.f, +1.f}, 
+        {+1.f, -1.f}, 
+        {-1.f, +1.f}, 
+        {+1.f, -1.f}, 
+        {+1.f, +1.f}
+    };
+    // clang-format on
     int vertices = 0;
     for (const Entity &e : entities) {
         if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() &&
@@ -102,16 +111,23 @@ void Render::renderEntity(const std::vector<Entity> &entities,
                 data.push_back(e.getComponent<Quad>().w);
                 data.push_back(e.getComponent<Quad>().h);
 
-                data.push_back(e.getComponent<Physics2D>().x);
-                data.push_back(e.getComponent<Physics2D>().y);
+                data.push_back(e.getComponent<Position2D>().x);
+                data.push_back(e.getComponent<Position2D>().y);
 
                 data.push_back(e.getComponent<Sprite>().x);
                 data.push_back(e.getComponent<Sprite>().y);
                 data.push_back(e.getComponent<Sprite>().w);
                 data.push_back(e.getComponent<Sprite>().h);
 
-                data.push_back(e.getComponent<Sprite>().sheet.lock()->width);
-                data.push_back(e.getComponent<Sprite>().sheet.lock()->height);
+                data.push_back(static_cast<float>(e.getComponent<Sprite>().sheet.lock()->width));
+                data.push_back(static_cast<float>(e.getComponent<Sprite>().sheet.lock()->height));
+                //std::cout << "w: " << e.getComponent<Sprite>().w
+                //          << " h: " << e.getComponent<Sprite>().h << "\n"
+                //          << "sheet w: "
+                //          << e.getComponent<Sprite>().sheet.lock()->width
+                //          << "sheet h: "
+                //          << e.getComponent<Sprite>().sheet.lock()->height
+                //          << "\n";
                 vertices += 2;
             }
         }
@@ -140,12 +156,12 @@ void Render::renderEntity(const std::vector<Entity> &entities,
     glEnableVertexAttribArray(2);
 
     // sprite selection
-    glVertexAttribPointer(3, 4, GL_INT, GL_FALSE,
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE,
                           6 * sizeof(float) + 6 * sizeof(int),
                           (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
-    glVertexAttribPointer(4, 2, GL_INT, GL_FALSE,
+    glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE,
                           6 * sizeof(float) + 6 * sizeof(int),
                           (void *)(10 * sizeof(float)));
     glEnableVertexAttribArray(4);

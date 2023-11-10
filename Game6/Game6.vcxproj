@@ -147,6 +147,8 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="grid.cpp" />
+    <ClCompile Include="Kinematics2D.cpp" />
+    <ClCompile Include="Position2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="physics2d.cpp" />
     <ClCompile Include="quad.cpp" />
@@ -154,6 +156,7 @@
     <ClCompile Include="resource.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
+    <ClCompile Include="PhysicsProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
@@ -179,8 +182,12 @@
     <ClInclude Include="inc\resource.hpp" />
     <ClInclude Include="inc\Sprite.hpp" />
     <ClInclude Include="inc\SpriteSheet.hpp" />
+    <ClInclude Include="inc\components\Position2D.hpp" />
+    <ClInclude Include="inc\components\Kinematics2D.hpp" />
+    <ClInclude Include="inc\PhysicsProcess.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\atlas.png" />
     <Image Include="res\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
