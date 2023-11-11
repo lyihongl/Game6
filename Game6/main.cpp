@@ -220,8 +220,10 @@ int main(int argc, char **argv) {
                     event.key.repeat == 0) {
 
                     Entity c = em.addEntity("C");
-                    c.setComponent<Position2D>({400, 400, 0});
-                    p.vy = -4;
+                    c.setComponent<Position2D>(
+                        {600, 600, b.getComponent<Position2D>().rad});
+                    p.vx = std::sin(b.getComponent<Position2D>().rad) * 4;
+                    p.vy = -std::cos(b.getComponent<Position2D>().rad) * 4;
                     c.setComponent<Physics2D>(p);
                     c.setComponent<Quad>({28, 56});
                     c.setComponent<Sprite>(sprite3);
