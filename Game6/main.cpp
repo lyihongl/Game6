@@ -172,11 +172,14 @@ int main(int argc, char **argv) {
     Entity b = em.addEntity("B");
 
     std::shared_ptr<SpriteSheet> sheet =
-        std::make_shared<SpriteSheet>("./res/spaceship1.png");
-    Sprite sprite{sheet, 0.f, 0.f, static_cast<float>(sheet->width),
-                  static_cast<float>(sheet->height)};
-    Sprite sprite2{sheet, 0.f, 0.f, static_cast<float>(sheet->width),
-                   static_cast<float>(sheet->height)};
+        std::make_shared<SpriteSheet>("./res/shipsall.gif");
+    Sprite sprite{sheet, 0.f, 0.f, static_cast<float>(64),
+                  static_cast<float>(64)};
+    Sprite sprite2{sheet, 0.f, 0.f, static_cast<float>(64),
+                   static_cast<float>(64)};
+
+    Sprite sprite3{sheet, 128.f, 64.f, static_cast<float>(28),
+                   static_cast<float>(56)};
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
@@ -188,7 +191,7 @@ int main(int argc, char **argv) {
 
     b.setComponent<Position2D>({600, 600, 0});
     b.setComponent<Physics2D>(p);
-    b.setComponent<Quad>({400, 400});
+    b.setComponent<Quad>({64, 64});
     b.setComponent<Sprite>(sprite2);
 
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -196,6 +199,7 @@ int main(int argc, char **argv) {
     glm::vec2 state = {0, 0};
     glm::vec2 derivative = {0, 0};
     double time = 0;
+    float target = 1;
     while (!quit) {
         // uint32_t now = SDL_GetTicks();
         auto delta_time = end_time - start_time;
@@ -211,6 +215,16 @@ int main(int argc, char **argv) {
                 if (event.key.keysym.sym == SDLK_q) {
                     quit = true;
                     break;
+                }
+                if (event.key.keysym.sym == SDLK_SPACE &&
+                    event.key.repeat == 0) {
+
+                    Entity c = em.addEntity("C");
+                    c.setComponent<Position2D>({400, 400, 0});
+                    p.vy = -4;
+                    c.setComponent<Physics2D>(p);
+                    c.setComponent<Quad>({28, 56});
+                    c.setComponent<Sprite>(sprite3);
                 }
             }
             }
@@ -251,16 +265,24 @@ int main(int argc, char **argv) {
                 // }
                 // std::cout << std::endl;
             }
-            derivative = Physics::RK4(1.5, state, derivative, time,
-                         static_cast<double>(delta_time_us) / 10000000);
+            target += 0.005;
+            derivative =
+                Physics::RK4(target, state, derivative, time,
+                             static_cast<double>(delta_time_us) / 10000000);
             state += derivative;
             b.getComponent<Position2D>().rad = state[0];
-            //std::cout << "derivative: " << glm::to_string(derivative) << std::endl;
-            // rome.simulate(ticks);
-            // for (Quad &q : quads) {
-            //    // q.rad += 0.005;
-            //    uint32_t quad_grid_x = q.x / 20;
-            //    uint32_t quad_grid_y = q.y / 20;
+            for (auto &e : em.entities) {
+                if (e.hasComponent<Physics2D>()) {
+                    e.getComponent<Position2D>() += e.getComponent<Physics2D>();
+                }
+            }
+            // std::cout << "derivative: " << glm::to_string(derivative) <<
+            // std::endl;
+            //  rome.simulate(ticks);
+            //  for (Quad &q : quads) {
+            //     // q.rad += 0.005;
+            //     uint32_t quad_grid_x = q.x / 20;
+            //     uint32_t quad_grid_y = q.y / 20;
 
             //    const auto &[ax, ay] = grid2[quad_grid_y][quad_grid_x];
             //    q.x += ax * 0.3;

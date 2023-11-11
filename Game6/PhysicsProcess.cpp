@@ -18,7 +18,7 @@ glm::dvec2 Physics::evaluate(double target, const glm::dvec2 &y,
     };
     glm::dvec2 output = {
         state[1],
-        accel(target, 0, y[0], y[1], t+dt, 0.01, 0.002, 0)
+        accel(target, 0.005, y[0], y[1], t+dt, 0.01, 0.002, 0.001)
     };
     //std::cout<<"accel: "<<glm::to_string(output)<<std::endl;
     // clang-format on

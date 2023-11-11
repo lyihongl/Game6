@@ -189,6 +189,8 @@
   <ItemGroup>
     <Image Include="res\atlas.png" />
     <Image Include="res\container.jpg" />
+    <Image Include="res\shipsall.gif" />
+    <Image Include="res\spaceship1.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,6 +17,6 @@ void main() {
 	gl_Position = vec4((pos.x + offset.x*size.x*cos(rad)-offset.y*size.y*sin(rad))/w-1, 1-(pos.y + offset.y*size.y*cos(rad)+sin(rad)*offset.x*size.x)/h, 0.0, 1.0);
 	// texCoord = vec2((sprite.x+float(sprite.z)/2 + offset.x*sprite.z/2)/sheetSize.x, (sprite.y+sprite.w/2 + offset.y*sprite.w/2)/sheetSize.y);
 	texCoord = vec2((sprite.x+float(sprite.z)/2 + offset.x*sprite.z/2)/sheetSize.x, 
-						(sprite.y+sprite.w)/sheetSize.y*(offset.y > 0 ? offset.y : 0.0f));
+						sprite.y/sheetSize.y+sprite.w/sheetSize.y*(offset.y > 0 ? offset.y : 0.0f));
 	// gl_Position = vec4(offset, 0.0, 1.0);
 }

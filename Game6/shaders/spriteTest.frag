@@ -7,10 +7,10 @@ in vec2 texCoord;
 uniform sampler2D tex;
 
 void main(){
-	vec4 intermediate = texture(tex, texCoord);
+	//vec4 intermediate = texture(tex, texCoord);
 	//if(intermediate.a < 0.1){
 	//	discard;
 	//}
-	 FragColor = 0.5*vec4(texCoord, 0.0, 1.0) + intermediate;
-	//FragColor = texture(tex, texCoord);
+	 //FragColor = 0.5*vec4(texCoord, 0.0, 1.0) + intermediate;
+	FragColor = texture(tex, texCoord);
 }
