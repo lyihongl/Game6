@@ -11,6 +11,6 @@ void main(){
 	//if(intermediate.a < 0.1){
 	//	discard;
 	//}
-	FragColor = 0.2*vec4(texCoord, 0.0, 1.0) + intermediate;
-	//FragColor = vec4(texCoord, 0.0, 1.0);
+	 FragColor = 0.5*vec4(texCoord, 0.0, 1.0) + intermediate;
+	//FragColor = texture(tex, texCoord);
 }

@@ -3,6 +3,7 @@
 #include "inc/grid.hpp"
 #include "inc/EntityManager.hpp"
 #include "inc/SpriteSheet.hpp"
+#include "inc/PhysicsProcess.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -171,27 +172,30 @@ int main(int argc, char **argv) {
     Entity b = em.addEntity("B");
 
     std::shared_ptr<SpriteSheet> sheet =
-        std::make_shared<SpriteSheet>("./res/atlas.png");
+        std::make_shared<SpriteSheet>("./res/spaceship1.png");
     Sprite sprite{sheet, 0.f, 0.f, static_cast<float>(sheet->width),
                   static_cast<float>(sheet->height)};
-    Sprite sprite2{sheet, 0.f, 0.f, static_cast<float>(382),
-                   static_cast<float>(493)};
+    Sprite sprite2{sheet, 0.f, 0.f, static_cast<float>(sheet->width),
+                   static_cast<float>(sheet->height)};
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
     Physics2D p{};
-    e.setComponent<Position2D>({100, 100});
+    e.setComponent<Position2D>({100, 100, 0});
     e.setComponent<Physics2D>(p);
     e.setComponent<Quad>({100, 100});
     e.setComponent<Sprite>(sprite);
 
-    b.setComponent<Position2D>({600, 600});
+    b.setComponent<Position2D>({600, 600, 0});
     b.setComponent<Physics2D>(p);
-    b.setComponent<Quad>({96, 123});
+    b.setComponent<Quad>({400, 400});
     b.setComponent<Sprite>(sprite2);
 
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = std::chrono::high_resolution_clock::now();
+    glm::vec2 state = {0, 0};
+    glm::vec2 derivative = {0, 0};
+    double time = 0;
     while (!quit) {
         // uint32_t now = SDL_GetTicks();
         auto delta_time = end_time - start_time;
@@ -247,6 +251,11 @@ int main(int argc, char **argv) {
                 // }
                 // std::cout << std::endl;
             }
+            derivative = Physics::RK4(1.5, state, derivative, time,
+                         static_cast<double>(delta_time_us) / 10000000);
+            state += derivative;
+            b.getComponent<Position2D>().rad = state[0];
+            //std::cout << "derivative: " << glm::to_string(derivative) << std::endl;
             // rome.simulate(ticks);
             // for (Quad &q : quads) {
             //    // q.rad += 0.005;

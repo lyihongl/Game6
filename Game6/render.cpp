@@ -113,6 +113,7 @@ void Render::renderEntity(const std::vector<Entity> &entities,
 
                 data.push_back(e.getComponent<Position2D>().x);
                 data.push_back(e.getComponent<Position2D>().y);
+                data.push_back(e.getComponent<Position2D>().rad);
 
                 data.push_back(e.getComponent<Sprite>().x);
                 data.push_back(e.getComponent<Sprite>().y);
@@ -132,6 +133,7 @@ void Render::renderEntity(const std::vector<Entity> &entities,
             }
         }
     }
+    GLuint dataSize = 13;
     glBindTexture(GL_TEXTURE_2D,
                   entities[0].getComponent<Sprite>().sheet.lock()->textureId);
     glBindVertexArray(VAO);
@@ -140,30 +142,30 @@ void Render::renderEntity(const std::vector<Entity> &entities,
                  GL_STATIC_DRAW);
     // x offset y offset
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
-                          6 * sizeof(float) + 6 * sizeof(int), (void *)0);
+                          dataSize * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
     // width height
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
-                          6 * sizeof(float) + 6 * sizeof(int),
+                          dataSize * sizeof(float),
                           (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // x y center
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
-                          6 * sizeof(float) + 6 * sizeof(int),
+    // x y center, rad
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE,
+                          dataSize * sizeof(float),
                           (void *)(4 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     // sprite selection
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE,
-                          6 * sizeof(float) + 6 * sizeof(int),
-                          (void *)(6 * sizeof(float)));
+                          dataSize * sizeof(float),
+                          (void *)(7 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
     glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE,
-                          6 * sizeof(float) + 6 * sizeof(int),
-                          (void *)(10 * sizeof(float)));
+                          dataSize * sizeof(float),
+                          (void *)(11 * sizeof(float)));
     glEnableVertexAttribArray(4);
     program.Use();
     // std::cout<<"screen_w: "<<screen_w<<std::endl;
