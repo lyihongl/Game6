@@ -27,8 +27,8 @@
 #include <stb_image.h>
 
 const int SCREEN_FULLSCREEN = 0;
-const uint32_t SCREEN_WIDTH = 1280;
-const uint32_t SCREEN_HEIGHT = 720;
+const uint32_t SCREEN_WIDTH = 1368;
+const uint32_t SCREEN_HEIGHT = 768;
 const float VP_RATIO = (float)SCREEN_WIDTH / SCREEN_HEIGHT;
 SDL_Window *window = NULL;
 SDL_GLContext maincontext;
@@ -169,7 +169,7 @@ int main(int argc, char **argv) {
     int mX = 0, mY = 0;
     EntityManager em{};
     Entity e = em.addEntity("A");
-    Entity b = em.addEntity("B");
+    Entity mainShipEntity = em.addEntity("B");
 
     std::shared_ptr<SpriteSheet> sheet =
         std::make_shared<SpriteSheet>("./res/shipsall.gif");
@@ -189,17 +189,17 @@ int main(int argc, char **argv) {
     e.setComponent<Quad>({100, 100});
     e.setComponent<Sprite>(sprite);
 
-    b.setComponent<Position2D>({600, 600, 0});
-    b.setComponent<Physics2D>(p);
-    b.setComponent<Quad>({64, 64});
-    b.setComponent<Sprite>(sprite2);
+    mainShipEntity.setComponent<Position2D>({600, 600, -2});
+    mainShipEntity.setComponent<Physics2D>(p);
+    mainShipEntity.setComponent<Quad>({32, 32});
+    mainShipEntity.setComponent<Sprite>(sprite2);
 
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = std::chrono::high_resolution_clock::now();
     glm::vec2 state = {0, 0};
     glm::vec2 derivative = {0, 0};
     double time = 0;
-    float target = 1;
+    float target = 0;
     while (!quit) {
         // uint32_t now = SDL_GetTicks();
         auto delta_time = end_time - start_time;
@@ -209,6 +209,12 @@ int main(int argc, char **argv) {
             case SDL_QUIT: {
                 // if (rng_gen) delete rng_gen;
                 quit = true;
+                break;
+            }
+            case SDL_MOUSEBUTTONDOWN: {
+                if (event.button.button == SDL_BUTTON_RIGHT) {
+                    SDL_GetMouseState(&mX, &mY);
+                }
                 break;
             }
             case SDL_KEYDOWN: {
@@ -221,11 +227,16 @@ int main(int argc, char **argv) {
 
                     Entity c = em.addEntity("C");
                     c.setComponent<Position2D>(
-                        {600, 600, b.getComponent<Position2D>().rad});
-                    p.vx = std::sin(b.getComponent<Position2D>().rad) * 4;
-                    p.vy = -std::cos(b.getComponent<Position2D>().rad) * 4;
+                        {600, 600,
+                         mainShipEntity.getComponent<Position2D>().rad});
+                    p.vx = std::sin(
+                               mainShipEntity.getComponent<Position2D>().rad) *
+                           4;
+                    p.vy = -std::cos(
+                               mainShipEntity.getComponent<Position2D>().rad) *
+                           4;
                     c.setComponent<Physics2D>(p);
-                    c.setComponent<Quad>({28, 56});
+                    c.setComponent<Quad>({14, 29});
                     c.setComponent<Sprite>(sprite3);
                 }
             }
@@ -248,36 +259,51 @@ int main(int argc, char **argv) {
             }
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            // std::cout << "fps: " << (1000000.f / delta_time_us) << "\n";
-            // std::cout << "delta time: " <<  delta_time_us << "\n";
-            ticks++;
-            SDL_GetMouseState(&mX, &mY);
-            unsigned int gridX = mX / 20;
-            unsigned int gridY = mY / 20;
-            if (ticks % 5) {
-                // std::cout<<gridX<<": "<<gridY<<std::endl;
-                // GridUtil::bfs(grid1, blocked, gridX, gridY);
-                // GridUtil::compute_gradient_mtx(grid1, grid2);
-                // for (const auto &row : grid1) {
-                //     for (const unsigned int &i : row) {
-                //         std::cout << i << " ";
-                //         // i = 0;
-                //     }
-                //     std::cout << "\n";
-                // }
-                // std::cout << std::endl;
+            float shipAngle = mainShipEntity.getComponent<Position2D>().rad;
+            glm::vec2 a{mainShipEntity.getComponent<Position2D>().x,
+                        mainShipEntity.getComponent<Position2D>().y};
+            glm::vec2 b = a + glm::vec2{10 * std::sin(shipAngle),
+                                        -10 * std::cos(shipAngle)};
+            glm::vec2 c{static_cast<float>(mX), static_cast<float>(mY)};
+            int relativeDir = Physics::relativeDir(a, b, c);
+            float angle = 0;
+            if (relativeDir == 1) {
+                glm::vec2 l1{a - b};
+                glm::vec2 l2{c - b};
+                angle =
+                    std::abs(std::atan2(std::fabs(l1.y * l2.x - l1.x * l2.y),
+                                        std::fabs(l1.x * l2.x + l1.y * l2.y)));
+            } else if (relativeDir == -1) {
+                glm::vec2 l1{a - b};
+                glm::vec2 l2{c - b};
+                angle =
+                    -std::abs(std::atan2(std::fabs(l1.y * l2.x - l1.x * l2.y),
+                                        std::fabs(l1.x * l2.x + l1.y * l2.y)));
             }
-            target += 0.005;
+            target = shipAngle + angle;
+            //std::cout << "relativeDir: " << relativeDir << " angle: " << angle
+            //          << "\n";
+            //std::cout << glm::to_string(a - b) << " " << glm::to_string(c - b)
+            //          << "\n";
+
             derivative =
                 Physics::RK4(target, state, derivative, time,
                              static_cast<double>(delta_time_us) / 10000000);
             state += derivative;
-            b.getComponent<Position2D>().rad = state[0];
-            for (auto &e : em.entities) {
-                if (e.hasComponent<Physics2D>()) {
-                    e.getComponent<Position2D>() += e.getComponent<Physics2D>();
+            mainShipEntity.getComponent<Position2D>().rad = state[0];
+            mainShipEntity.getComponent<Physics2D>().vx =
+                glm::sin(state[0]) * 2;
+            mainShipEntity.getComponent<Physics2D>().vy =
+                -glm::cos(state[0]) * 2;
+            // std::cout << "state: " << glm::to_string(state)
+            //           << " derivative:" << glm::to_string(derivative)
+            //           << std::endl;
+            for (auto &f : em.entities) {
+                if (f.hasComponent<Physics2D>()) {
+                    f.getComponent<Position2D>() += f.getComponent<Physics2D>();
                 }
             }
+
             // std::cout << "derivative: " << glm::to_string(derivative) <<
             // std::endl;
             //  rome.simulate(ticks);
