@@ -187,7 +187,7 @@
     <ClInclude Include="inc\components\Position2D.hpp" />
     <ClInclude Include="inc\components\Kinematics2D.hpp" />
     <ClInclude Include="inc\PhysicsProcess.hpp" />
-    <ClInclude Include="inc\SecondOrder.h" />
+    <ClInclude Include="inc\SecondOrder.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\atlas.png" />

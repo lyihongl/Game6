@@ -137,7 +137,7 @@
     <ClInclude Include="inc\PhysicsProcess.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\SecondOrder.h">
+    <ClInclude Include="inc\SecondOrder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\components\collider2d.hpp">
