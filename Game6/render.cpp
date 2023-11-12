@@ -113,6 +113,7 @@ void Render::renderEntity(const std::vector<Entity> &entities,
         if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() &&
             e.hasComponent<Position2D>()) {
             for (const auto &corner : corners) {
+                //std::cout << "rendering: "<<e.getComponent<Position2D>().x;
                 //if (e.getComponent<Position2D>().x < 0 ||
                 //    e.getComponent<Position2D>().x >= screen_w ||
                 //    e.getComponent<Position2D>().y < 0 ||

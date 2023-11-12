@@ -1,6 +1,7 @@
-#include <glm/glm.hpp>
 #pragma once
-class Kinematics2D {
+#include <glm/glm.hpp>
+#include "ComponentBase.hpp"
+class Kinematics2D : Component2D {
     public:
     glm::vec2 velocity;
     glm::vec2 acceleration;
@@ -10,4 +11,5 @@ class Kinematics2D {
     Kinematics2D &withAcceleration(const glm::vec2&);
     Kinematics2D &withOmega(float vrad);
     Kinematics2D &withAlpha(float arad);
+    virtual void reset();
 };

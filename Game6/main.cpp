@@ -186,6 +186,7 @@ int main(int argc, char **argv) {
     Entity r = em.addEntity("");
     r.setComponent<Quad>({12, 12});
     r.setComponent<Sprite>(retical);
+    r.setComponent<Position2D>({0, 0, 0});
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
@@ -220,6 +221,7 @@ int main(int argc, char **argv) {
     glm::vec2 cameraZoomState = {zoomh, 0};
     glm::vec2 dcameraZoomState = {0, 0};
     float targetH = zoomh;
+    unsigned long long lastZoom = 0;
 
     while (!quit) {
         // uint32_t now = SDL_GetTicks();
@@ -259,11 +261,13 @@ int main(int argc, char **argv) {
                 break;
             }
             case SDL_MOUSEWHEEL: {
+                //lastZoom 
                 if (event.wheel.y > 0) {
                     // zoomw -= 30 * VP_RATIO;
                     // zoomh -= 30;
                     // cameraOffset += glm::vec2{15 * VP_RATIO, 15};
 
+                    //targetH = std::fmax(targetH-100, 0.5*SCREEN_HEIGHT);
                     if (viewZoom == 1) {
                         viewZoom = 0;
                         targetH = 0.5f * SCREEN_HEIGHT;
@@ -274,6 +278,7 @@ int main(int argc, char **argv) {
                         targetH = 0.5f * SCREEN_HEIGHT;
                     }
                 } else if (event.wheel.y < 0) {
+                    //targetH += 100;
                     if (viewZoom == 1) {
                         viewZoom = 2;
                         targetH = 2 * SCREEN_HEIGHT;
@@ -353,6 +358,8 @@ int main(int argc, char **argv) {
                     floor(minimum_fps_delta_time); // slow down if the
                                                    // computer is too slow
             }
+            cameraOffset.x = mainShipEntity.getComponent<Position2D>().x - zoomw/2;
+            cameraOffset.y = mainShipEntity.getComponent<Position2D>().y - zoomh/2;
             // cameraOffset.x += 1;
             //  glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
             glClearColor(156 / 255.f, 166 / 255.f, 158 / 255.f, 1.0f);

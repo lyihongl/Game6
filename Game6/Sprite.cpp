@@ -30,3 +30,5 @@ const Sprite &Sprite::operator=(const Sprite &s) {
     // (static_cast<float>(y) + h) / sheet.lock()->height);
     return *this;
 }
+
+void Sprite::reset() {}

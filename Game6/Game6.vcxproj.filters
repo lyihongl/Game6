@@ -78,6 +78,9 @@
     <ClCompile Include="PhysicsProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SecondOrder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fieldLines.frag">
@@ -125,25 +128,31 @@
     <ClInclude Include="inc\resource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\components\collider2d.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\components\physics2d.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Sprite.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\SpriteSheet.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\components\Position2D.hpp">
+    <ClInclude Include="inc\PhysicsProcess.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SecondOrder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\components\collider2d.hpp">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\components\physics2d.hpp">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\components\Position2D.hpp">
+      <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="inc\components\Kinematics2D.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\components</Filter>
     </ClInclude>
-    <ClInclude Include="inc\PhysicsProcess.hpp">
+    <ClInclude Include="inc\components\ComponentBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

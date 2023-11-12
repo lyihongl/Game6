@@ -154,6 +154,7 @@
     <ClCompile Include="quad.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="resource.cpp" />
+    <ClCompile Include="SecondOrder.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="PhysicsProcess.cpp" />
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="inc\componentPool.hpp" />
     <ClInclude Include="inc\components\collider2d.hpp" />
+    <ClInclude Include="inc\components\ComponentBase.hpp" />
     <ClInclude Include="inc\components\physics2d.hpp" />
     <ClInclude Include="inc\constants.hpp" />
     <ClInclude Include="inc\economy.hpp" />
@@ -185,6 +187,7 @@
     <ClInclude Include="inc\components\Position2D.hpp" />
     <ClInclude Include="inc\components\Kinematics2D.hpp" />
     <ClInclude Include="inc\PhysicsProcess.hpp" />
+    <ClInclude Include="inc\SecondOrder.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\atlas.png" />

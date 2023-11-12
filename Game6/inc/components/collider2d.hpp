@@ -1,9 +1,10 @@
 #pragma once
-class Collider2D {
+#include "ComponentBase.hpp"
+class Collider2D : Component2D{
     float x, y;
     float leftBound, rightBound, topBound, bottomBound;
 
     public:
     Collider2D();
-    void reset();
+    virtual void reset();
 };
