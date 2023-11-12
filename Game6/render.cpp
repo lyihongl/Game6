@@ -1,10 +1,13 @@
 #include "inc/render.hpp"
+#include <ranges>
 #include <glad/glad.h>
 
+
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Render::Render(uint32_t screen_w, uint32_t screen_h) {
+Render::Render(float screen_w, float screen_h) {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     this->screen_w = screen_w;
@@ -13,6 +16,11 @@ Render::Render(uint32_t screen_w, uint32_t screen_h) {
 Render::~Render() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+}
+
+void Render::updateRes(float screen_w, float screen_h) {
+    this->screen_w = screen_w;
+    this->screen_h = screen_h;
 }
 
 void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
@@ -87,7 +95,7 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
 }
 
 void Render::renderEntity(const std::vector<Entity> &entities,
-                          const Shader &program) {
+                          const Shader &program, const glm::vec2& cameraOffset) {
     std::vector<float> data;
 
     // clang-format off
@@ -101,16 +109,16 @@ void Render::renderEntity(const std::vector<Entity> &entities,
     };
     // clang-format on
     int vertices = 0;
-    for (const Entity &e : entities) {
+    for (const Entity &e : entities | std::views::reverse) {
         if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() &&
-            e.hasComponent<Physics2D>() && e.hasComponent<Position2D>()) {
+            e.hasComponent<Position2D>()) {
             for (const auto &corner : corners) {
-                if (e.getComponent<Position2D>().x < 0 ||
-                    e.getComponent<Position2D>().x >= screen_w ||
-                    e.getComponent<Position2D>().y < 0 ||
-                    e.getComponent<Physics2D>().y >= screen_h) {
-                    continue;
-                }
+                //if (e.getComponent<Position2D>().x < 0 ||
+                //    e.getComponent<Position2D>().x >= screen_w ||
+                //    e.getComponent<Position2D>().y < 0 ||
+                //    e.getComponent<Physics2D>().y >= screen_h) {
+                //    continue;
+                //}
                 data.push_back(corner.x); // x offset
                 data.push_back(corner.y); // y offset
 
@@ -173,7 +181,9 @@ void Render::renderEntity(const std::vector<Entity> &entities,
     glEnableVertexAttribArray(4);
     program.Use();
     // std::cout<<"screen_w: "<<screen_w<<std::endl;
-    glUniform1i(glGetUniformLocation(program.ID, "h"), screen_h);
-    glUniform1i(glGetUniformLocation(program.ID, "w"), screen_w);
+    glUniform1f(glGetUniformLocation(program.ID, "h"), screen_h);
+    glUniform1f(glGetUniformLocation(program.ID, "w"), screen_w);
+    glUniform2fv(glGetUniformLocation(program.ID, "cameraOffset"), 1, glm::value_ptr(cameraOffset));
+    //std::cout << "update res: " << screen_h << "\n";
     glDrawArrays(GL_TRIANGLES, 0, vertices * 3);
 }

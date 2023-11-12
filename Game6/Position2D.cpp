@@ -6,3 +6,9 @@ Position2D &Position2D::operator+=(const Physics2D &other) {
     rad += other.vrad;
     return *this;
 }
+
+Position2D &Position2D::operator=(const glm::vec2 &&other) {
+    x = other.x;
+    y = other.y;
+    return *this;
+}

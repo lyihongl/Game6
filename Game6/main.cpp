@@ -27,8 +27,8 @@
 #include <stb_image.h>
 
 const int SCREEN_FULLSCREEN = 0;
-const uint32_t SCREEN_WIDTH = 1368;
-const uint32_t SCREEN_HEIGHT = 768;
+const float SCREEN_WIDTH = 1368;
+const float SCREEN_HEIGHT = 768;
 const float VP_RATIO = (float)SCREEN_WIDTH / SCREEN_HEIGHT;
 SDL_Window *window = NULL;
 SDL_GLContext maincontext;
@@ -63,9 +63,10 @@ void init_screen(const char *caption) {
             caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 0, 0,
             SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
     } else {
-        window = SDL_CreateWindow(caption, SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                                  SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+        window = SDL_CreateWindow(
+            caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            static_cast<uint32_t>(SCREEN_WIDTH),
+            static_cast<uint32_t>(SCREEN_HEIGHT), SDL_WINDOW_OPENGL);
     }
     if (window == NULL) sdl_die("Couldn't set video mode");
 
@@ -180,11 +181,16 @@ int main(int argc, char **argv) {
 
     Sprite sprite3{sheet, 128.f, 64.f, static_cast<float>(28),
                    static_cast<float>(56)};
+    Sprite retical{sheet, 196.f, 4.f, 24.f, 24.f};
+
+    Entity r = em.addEntity("");
+    r.setComponent<Quad>({12, 12});
+    r.setComponent<Sprite>(retical);
 
     std::cout << "sheet width: " << sheet->width << std::endl;
 
     Physics2D p{};
-    e.setComponent<Position2D>({100, 100, 0});
+    e.setComponent<Position2D>({0, 0, 0});
     e.setComponent<Physics2D>(p);
     e.setComponent<Quad>({100, 100});
     e.setComponent<Sprite>(sprite);
@@ -198,8 +204,23 @@ int main(int argc, char **argv) {
     auto end_time = std::chrono::high_resolution_clock::now();
     glm::vec2 state = {0, 0};
     glm::vec2 derivative = {0, 0};
+
+    glm::vec2 vstate = {0, 0};
+    glm::vec2 vderivative = {0, 0};
+
+    // glm::vec2 cameraOffset = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    glm::vec2 cameraOffset = {100.f, 100.f};
+
     double time = 0;
     float target = 0;
+    float zoomw = SCREEN_WIDTH;
+    float zoomh = SCREEN_HEIGHT;
+    // glm::ivec2 mousePos;
+    int viewZoom = 1;
+    glm::vec2 cameraZoomState = {zoomh, 0};
+    glm::vec2 dcameraZoomState = {0, 0};
+    float targetH = zoomh;
+
     while (!quit) {
         // uint32_t now = SDL_GetTicks();
         auto delta_time = end_time - start_time;
@@ -214,6 +235,54 @@ int main(int argc, char **argv) {
             case SDL_MOUSEBUTTONDOWN: {
                 if (event.button.button == SDL_BUTTON_RIGHT) {
                     SDL_GetMouseState(&mX, &mY);
+                    if (!r.hasComponent<Position2D>()) {
+                        r.setComponent<Position2D>(
+                            {static_cast<float>(mX) +
+                                 cameraOffset.x * zoomw / SCREEN_WIDTH,
+                             static_cast<float>(mY) +
+                                 cameraOffset.y * zoomh / SCREEN_HEIGHT,
+                             0.f});
+                        // r.setComponent<Position2D>({
+                        //     static_cast<float>(mX) / 2 * screenw /
+                        //     SCREEN_WIDTH, static_cast<float>(mX) / 2 *
+                        //     screenw / SCREEN_WIDTH,
+                        //     });
+                    } else {
+                        r.getComponent<Position2D>().x =
+                            static_cast<float>(mX) * zoomw / SCREEN_WIDTH +
+                            cameraOffset.x;
+                        r.getComponent<Position2D>().y =
+                            static_cast<float>(mY) * zoomh / SCREEN_HEIGHT +
+                            cameraOffset.y;
+                    }
+                }
+                break;
+            }
+            case SDL_MOUSEWHEEL: {
+                if (event.wheel.y > 0) {
+                    // zoomw -= 30 * VP_RATIO;
+                    // zoomh -= 30;
+                    // cameraOffset += glm::vec2{15 * VP_RATIO, 15};
+
+                    if (viewZoom == 1) {
+                        viewZoom = 0;
+                        targetH = 0.5f * SCREEN_HEIGHT;
+                    } else if (viewZoom == 2) {
+                        viewZoom = 1;
+                        targetH = SCREEN_HEIGHT;
+                    } else if (viewZoom == 0) {
+                        targetH = 0.5f * SCREEN_HEIGHT;
+                    }
+                } else if (event.wheel.y < 0) {
+                    if (viewZoom == 1) {
+                        viewZoom = 2;
+                        targetH = 2 * SCREEN_HEIGHT;
+                    } else if (viewZoom == 0) {
+                        viewZoom = 1;
+                        targetH = SCREEN_HEIGHT;
+                    } else if (viewZoom == 2) {
+                        targetH = 2 * SCREEN_HEIGHT;
+                    }
                 }
                 break;
             }
@@ -225,16 +294,15 @@ int main(int argc, char **argv) {
                 if (event.key.keysym.sym == SDLK_SPACE &&
                     event.key.repeat == 0) {
 
-                    Entity c = em.addEntity("C");
+                    Entity c = em.addEntity("");
                     c.setComponent<Position2D>(
-                        {600, 600,
-                         mainShipEntity.getComponent<Position2D>().rad});
+                        mainShipEntity.getComponent<Position2D>());
                     p.vx = std::sin(
                                mainShipEntity.getComponent<Position2D>().rad) *
-                           4;
+                           6;
                     p.vy = -std::cos(
                                mainShipEntity.getComponent<Position2D>().rad) *
-                           4;
+                           6;
                     c.setComponent<Physics2D>(p);
                     c.setComponent<Quad>({14, 29});
                     c.setComponent<Sprite>(sprite3);
@@ -249,6 +317,34 @@ int main(int argc, char **argv) {
         if (delta_time_us > minimum_fps_delta_time) {
             SDL_GL_SwapWindow(window);
 
+            if (std::fabs(zoomh - targetH) > 0.01) {
+                cameraZoomState.x = zoomh;
+                dcameraZoomState = Physics::RK4(
+                    targetH, cameraZoomState, dcameraZoomState, time,
+                    static_cast<double>(delta_time_us) / 10000000);
+                cameraZoomState += dcameraZoomState;
+                zoomh += dcameraZoomState.x;
+                zoomw += dcameraZoomState.x * VP_RATIO;
+                cameraOffset -= glm::vec2{dcameraZoomState.x * VP_RATIO * 0.5,
+                                          dcameraZoomState.x * 0.5};
+            }
+            // if (viewZoom == 2 && std::fabs(SCREEN_HEIGHT * 2 - zoomh) >
+            // 0.001) { zoomw += 30 * VP_RATIO; zoomh += 30; cameraOffset -=
+            // glm::vec2{15 * VP_RATIO, 15};
+            //} else if (viewZoom == 1 && std::fabs(SCREEN_HEIGHT - zoomh) >
+            // 0.001)
+            // SDL_GetMouseState(&mousePos.x, &mousePos.y);
+            // if (mousePos.x < 40) {
+            //     cameraOffset.x -= 10;
+            // } else if (mousePos.x >= SCREEN_WIDTH - 40) {
+            //     cameraOffset.x += 10;
+            // }
+            // if (mousePos.y < 40) {
+            //     cameraOffset.y -= 10;
+            // } else if (mousePos.y >= SCREEN_HEIGHT - 40) {
+            //     cameraOffset.y += 10;
+            // }
+
             // Uint32 delta_time = now - last_game_step;
             //  wait_time = std::min(0, minimum_fps_delta_time - delta_time);
 
@@ -257,14 +353,17 @@ int main(int argc, char **argv) {
                     floor(minimum_fps_delta_time); // slow down if the
                                                    // computer is too slow
             }
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            // cameraOffset.x += 1;
+            //  glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+            glClearColor(156 / 255.f, 166 / 255.f, 158 / 255.f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
             float shipAngle = mainShipEntity.getComponent<Position2D>().rad;
             glm::vec2 a{mainShipEntity.getComponent<Position2D>().x,
                         mainShipEntity.getComponent<Position2D>().y};
             glm::vec2 b = a + glm::vec2{10 * std::sin(shipAngle),
                                         -10 * std::cos(shipAngle)};
-            glm::vec2 c{static_cast<float>(mX), static_cast<float>(mY)};
+            glm::vec2 c{r.getComponent<Position2D>().x,
+                        r.getComponent<Position2D>().y};
             int relativeDir = Physics::relativeDir(a, b, c);
             float angle = 0;
             if (relativeDir == 1) {
@@ -278,31 +377,58 @@ int main(int argc, char **argv) {
                 glm::vec2 l2{c - b};
                 angle =
                     -std::abs(std::atan2(std::fabs(l1.y * l2.x - l1.x * l2.y),
-                                        std::fabs(l1.x * l2.x + l1.y * l2.y)));
+                                         std::fabs(l1.x * l2.x + l1.y * l2.y)));
             }
             target = shipAngle + angle;
-            //std::cout << "relativeDir: " << relativeDir << " angle: " << angle
-            //          << "\n";
-            //std::cout << glm::to_string(a - b) << " " << glm::to_string(c - b)
-            //          << "\n";
+            // zoomw += 1.f*VP_RATIO;
+            // zoomh += 1.f;
+            render.updateRes(zoomw, zoomh);
+            // std::cout << "relativeDir: " << relativeDir << " angle: " <<
+            // angle
+            //           << "\n";
+            // std::cout << glm::to_string(a - b) << " " << glm::to_string(c -
+            // b)
+            //           << "\n";
 
+            // state = {shipAngle,
+            // mainShipEntity.getComponent<Physics2D>().vrad};
+            if (r.hasComponent<Position2D>()) {
+                vstate.x = glm::length(c - a);
+                vderivative =
+                    Physics::RK4(0, vstate, vderivative, time,
+                                 static_cast<double>(delta_time_us) / 10000000);
+                vderivative[0] = vderivative[0] / std::fabs(vderivative[0]) *
+                                 std::fmin(std::fabs(vderivative[0]), 3.f);
+                // std::cout << "vdervative: " << glm::to_string(vderivative)
+                //           << "\n";
+                vstate + vderivative;
+                mainShipEntity.getComponent<Physics2D>().vx =
+                    -glm::sin(shipAngle) * vderivative[0];
+                mainShipEntity.getComponent<Physics2D>().vy =
+                    glm::cos(shipAngle) * vderivative[0];
+            }
+            state.x = shipAngle;
             derivative =
                 Physics::RK4(target, state, derivative, time,
                              static_cast<double>(delta_time_us) / 10000000);
             state += derivative;
-            mainShipEntity.getComponent<Position2D>().rad = state[0];
-            mainShipEntity.getComponent<Physics2D>().vx =
-                glm::sin(state[0]) * 2;
-            mainShipEntity.getComponent<Physics2D>().vy =
-                -glm::cos(state[0]) * 2;
-            // std::cout << "state: " << glm::to_string(state)
-            //           << " derivative:" << glm::to_string(derivative)
-            //           << std::endl;
+
+            mainShipEntity.getComponent<Physics2D>().vrad = derivative[0];
+            // mainShipEntity.getComponent<Physics2D>().vx =
+            //     glm::sin(state[0]) * 2;
+            // mainShipEntity.getComponent<Physics2D>().vy =
+            //     -glm::cos(state[0]) * 2;
             for (auto &f : em.entities) {
                 if (f.hasComponent<Physics2D>()) {
                     f.getComponent<Position2D>() += f.getComponent<Physics2D>();
                 }
             }
+            // std::cout << "state: " << glm::to_string(state)
+            //           << " derivative:" << glm::to_string(derivative) <<
+            //           "\n";
+            // std::cout << "ship rad: "
+            //           << mainShipEntity.getComponent<Position2D>().rad <<
+            //           "\n";
 
             // std::cout << "derivative: " << glm::to_string(derivative) <<
             // std::endl;
@@ -331,7 +457,7 @@ int main(int argc, char **argv) {
             // RenderGame();
 
             // last_game_step = now;
-            render.renderEntity(em.entities, spriteShader);
+            render.renderEntity(em.entities, spriteShader, cameraOffset);
             start_time = std::chrono::high_resolution_clock::now();
         } else {
             // we're too fast, wait a bit.
