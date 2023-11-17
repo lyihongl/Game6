@@ -5,5 +5,7 @@
 class EntityManager {
     public:
     Entity addEntity(const std::string &tag);
+    Entity addParticle(const std::string &tag);
     std::vector<Entity> entities;
+    std::vector<Entity> particles;
 };

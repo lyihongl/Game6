@@ -8,3 +8,7 @@ Entity EntityManager::addEntity(const std::string &tag) {
 
     return e;
 }
+
+Entity EntityManager::addParticle(const std::string& tag) {
+    
+}

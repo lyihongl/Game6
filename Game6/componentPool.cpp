@@ -31,6 +31,7 @@ ComponentPool& ComponentPool::Instance() {
     return pool;
 }
 
+
 const std::string& ComponentPool::getTag(std::size_t id) const {
     return tags[id];
 }

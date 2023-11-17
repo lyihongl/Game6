@@ -148,6 +148,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="Kinematics2D.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Position2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="physics2d.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="inc\components\Kinematics2D.hpp" />
     <ClInclude Include="inc\PhysicsProcess.hpp" />
     <ClInclude Include="inc\SecondOrder.hpp" />
+    <ClInclude Include="inc\Particle.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\atlas.png" />
