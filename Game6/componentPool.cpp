@@ -27,7 +27,7 @@ std::size_t ComponentPool::getNextIndex() const {
 }
 
 ComponentPool& ComponentPool::Instance() {
-    static ComponentPool pool{200};
+    static ComponentPool pool{1000};
     return pool;
 }
 

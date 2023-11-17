@@ -8,8 +8,8 @@ double accel(double x, double dx, double y, double dy, double t, double c1,
     return (x + c3 * dx - y - c1 * dy) / c2;
 }
 
-glm::dvec2 Physics::evaluate(double target, const glm::dvec2 &y,
-                             const glm::dvec2 &dy, double t, double dt) {
+glm::dvec2 Physics::evaluate(double target, const glm::dvec2& y,
+                             const glm::dvec2& dy, double t, double dt) {
     // std::cout<<"d0: "<<glm::to_string(dy)<<std::endl;
     // clang-format off
     glm::dvec2 state = { 
@@ -25,8 +25,8 @@ glm::dvec2 Physics::evaluate(double target, const glm::dvec2 &y,
     return output;
 }
 
-glm::dvec2 Physics::RK4(double target, const glm::vec2 &state,
-                        const glm::vec2 &d0, double t, double dt) {
+glm::dvec2 Physics::RK4(double target, const glm::dvec2& state,
+                        const glm::dvec2& d0, double t, double dt) {
     glm::dvec2 k1, k2, k3, k4;
     k1 = evaluate(target, state, d0, t, dt);
     k2 = evaluate(target, state, k1, t, dt * 0.5f);
@@ -37,12 +37,22 @@ glm::dvec2 Physics::RK4(double target, const glm::vec2 &state,
     double dvdt = dt / 6.0 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]);
     return {dxdt, dvdt};
 }
+glm::dvec2 Physics::implicitEuler(double target, const glm::dvec2& state,
+                                  double t, double dt) {
 
-int Physics::relativeDir(const glm::vec2 &a, const glm::vec2 &b,
-                    const glm::vec2 &c) {
+    double x = state[0] + dt * state[1];
+    double dx = state[1] + dt * (target - x - 0.01 * state[1]) / 0.0001;
+    return glm::dvec2{x, dx};
+}
+
+int Physics::relativeDir(const glm::vec2& a, const glm::vec2& b,
+                         const glm::vec2& c) {
     float d = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
     //std::cout << "d: " << d << std::endl;
-    if (d > 0) return 1;
-    if (d == 0) return 0;
-    if (d < 0) return -1;
+    if (d > 0)
+        return 1;
+    if (d == 0)
+        return 0;
+    if (d < 0)
+        return -1;
 }
