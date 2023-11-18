@@ -4,6 +4,7 @@
 #include "inc/empire.hpp"
 #include "inc/grid.hpp"
 #include "inc/render.hpp"
+#include "inc/Particle.hpp"
 
 #include <windows.h>
 #include <chrono>
@@ -191,6 +192,8 @@ int main(int argc, char** argv) {
                    static_cast<float>(56)};
     Sprite retical{sheet, 196.f, 4.f, 24.f, 24.f};
 
+    Particle reticalParticle(retical);
+
     Entity r = em.addEntity("");
     r.setComponent<Quad>({12, 12});
     r.setComponent<Sprite>(retical);
@@ -217,7 +220,6 @@ int main(int argc, char** argv) {
     glm::dvec2 vstate = {0, 0};
     glm::dvec2 vderivative = {0, 0};
 
-    // glm::vec2 cameraOffset = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     glm::dvec2 cameraOffset = {100.0, 100.0};
 
     double time = 0;

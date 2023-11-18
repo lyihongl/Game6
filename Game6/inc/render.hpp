@@ -2,6 +2,7 @@
 
 #include "quad.hpp"
 #include "entity.hpp"
+#include "Particle.hpp"
 
 #include <vector>
 #include <shaders.hpp>
@@ -21,5 +22,7 @@ class Render {
     Render(Render &&) = delete;
     Render operator=(Render &) = delete;
     void renderQuad(const std::vector<Quad> &, const Shader &);
-    void renderEntity(const std::vector<Entity> &, const Shader &, const glm::vec2&);
+    void renderEntity(const std::vector<Entity> &, const Shader &, const glm::vec2& cameraOffset);
+    void renderParticle(const Particle&, const Shader&,
+                        const glm::vec2& cameraOffset);
 };

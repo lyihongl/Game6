@@ -1,11 +1,10 @@
 #include "inc/render.hpp"
-#include <ranges>
 #include <glad/glad.h>
-
+#include <ranges>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Render::Render(float screen_w, float screen_h) {
     glGenVertexArrays(1, &VAO);
@@ -23,12 +22,12 @@ void Render::updateRes(float screen_w, float screen_h) {
     this->screen_h = screen_h;
 }
 
-void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
+void Render::renderQuad(const std::vector<Quad>& quad, const Shader& sProgram) {
     // verticies
     std::vector<float> vertices;
     uint32_t draw_N = 0;
 
-    for (const Quad &q : quad) {
+    for (const Quad& q : quad) {
         // vertices.push_back(q.topLeft().first);
         // vertices.push_back(q.topLeft().second);
         // vertices.push_back(q.x);
@@ -73,19 +72,19 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
                  vertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)0);
+                          (void*)0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)(2 * sizeof(float)));
+                          (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)(3 * sizeof(float)));
+                          (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)(4 * sizeof(float)));
+                          (void*)(4 * sizeof(float)));
     glEnableVertexAttribArray(3);
     sProgram.Use();
     // std::cout<<"screen_w: "<<screen_w<<std::endl;
@@ -94,8 +93,9 @@ void Render::renderQuad(const std::vector<Quad> &quad, const Shader &sProgram) {
     glDrawArrays(GL_TRIANGLES, 0, draw_N * 3);
 }
 
-void Render::renderEntity(const std::vector<Entity> &entities,
-                          const Shader &program, const glm::vec2& cameraOffset) {
+void Render::renderEntity(const std::vector<Entity>& entities,
+                          const Shader& program,
+                          const glm::vec2& cameraOffset) {
     std::vector<float> data;
 
     // clang-format off
@@ -109,10 +109,10 @@ void Render::renderEntity(const std::vector<Entity> &entities,
     };
     // clang-format on
     int vertices = 0;
-    for (const Entity &e : entities | std::views::reverse) {
+    for (const Entity& e : entities | std::views::reverse) {
         if (e.hasComponent<Sprite>() && e.hasComponent<Quad>() &&
             e.hasComponent<Position2D>()) {
-            for (const auto &corner : corners) {
+            for (const auto& corner : corners) {
                 //std::cout << "rendering: "<<e.getComponent<Position2D>().x;
                 //if (e.getComponent<Position2D>().x < 0 ||
                 //    e.getComponent<Position2D>().x >= screen_w ||
@@ -120,8 +120,8 @@ void Render::renderEntity(const std::vector<Entity> &entities,
                 //    e.getComponent<Physics2D>().y >= screen_h) {
                 //    continue;
                 //}
-                data.push_back(corner.x); // x offset
-                data.push_back(corner.y); // y offset
+                data.push_back(corner.x);  // x offset
+                data.push_back(corner.y);  // y offset
 
                 data.push_back(e.getComponent<Quad>().w);
                 data.push_back(e.getComponent<Quad>().h);
@@ -159,32 +159,73 @@ void Render::renderEntity(const std::vector<Entity> &entities,
                  GL_STATIC_DRAW);
     // x offset y offset
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, dataSize * sizeof(float),
-                          (void *)0);
+                          (void*)0);
     glEnableVertexAttribArray(0);
 
     // width height
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, dataSize * sizeof(float),
-                          (void *)(2 * sizeof(float)));
+                          (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // x y center, rad
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, dataSize * sizeof(float),
-                          (void *)(4 * sizeof(float)));
+                          (void*)(4 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     // sprite selection
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, dataSize * sizeof(float),
-                          (void *)(7 * sizeof(float)));
+                          (void*)(7 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
     glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, dataSize * sizeof(float),
-                          (void *)(11 * sizeof(float)));
+                          (void*)(11 * sizeof(float)));
     glEnableVertexAttribArray(4);
     program.Use();
     // std::cout<<"screen_w: "<<screen_w<<std::endl;
     glUniform1f(glGetUniformLocation(program.ID, "h"), screen_h);
     glUniform1f(glGetUniformLocation(program.ID, "w"), screen_w);
-    glUniform2fv(glGetUniformLocation(program.ID, "cameraOffset"), 1, glm::value_ptr(cameraOffset));
+    glUniform2fv(glGetUniformLocation(program.ID, "cameraOffset"), 1,
+                 glm::value_ptr(cameraOffset));
     //std::cout << "update res: " << screen_h << "\n";
     glDrawArrays(GL_TRIANGLES, 0, vertices * 3);
+}
+
+void Render::renderParticle(const Particle& particle, const Shader& shader,
+                            const glm::vec2& cameraOffset) {
+    std::vector<float> data;
+
+    // clang-format off
+    std::vector<glm::vec2> corners = {
+        {-1.f, -1.f}, 
+        {-1.f, +1.f}, 
+        {+1.f, -1.f}, 
+        {-1.f, +1.f}, 
+        {+1.f, -1.f}, 
+        {+1.f, +1.f}
+    };
+    int vertices = 0;
+    
+    for (const auto& corner : corners) {
+		data.push_back(corner.x);  // x offset
+		data.push_back(corner.y);  // y offset
+
+		data.push_back(particle.quad.w);
+		data.push_back(particle.quad.h);
+
+		data.push_back(particle.sprite.x);
+		data.push_back(particle.sprite.y);
+		data.push_back(particle.sprite.w);
+		data.push_back(particle.sprite.h);
+		data.push_back(static_cast<float>(
+			particle.sprite.sheet.lock()->width));
+		data.push_back(static_cast<float>(
+			particle.sprite.sheet.lock()->height));
+    }
+    for (std::size_t i = 0; i < particle.count; i++) {
+        if (std::get<std::vector<bool>>(particle.components)[i]) {
+             data.push_back(std::get<std::vector<Position2D>>(particle.components)[i].x);
+             data.push_back(std::get<std::vector<Position2D>>(particle.components)[i].y);
+             data.push_back(std::get<std::vector<Position2D>>(particle.components)[i].rad);
+        }
+    }
 }

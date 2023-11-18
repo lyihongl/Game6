@@ -10,5 +10,5 @@ Entity EntityManager::addEntity(const std::string &tag) {
 }
 
 Entity EntityManager::addParticle(const std::string& tag) {
-    
+
 }
