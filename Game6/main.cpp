@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
                    static_cast<float>(56)};
     Sprite retical{sheet, 196.f, 4.f, 24.f, 24.f};
 
-    Particle reticalParticle(retical);
+    Particle reticalParticle(retical, Quad{50, 50});
 
     Entity r = em.addEntity("");
     r.setComponent<Quad>({12, 12});

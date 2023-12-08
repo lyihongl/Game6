@@ -88,8 +88,8 @@ void Render::renderQuad(const std::vector<Quad>& quad, const Shader& sProgram) {
     glEnableVertexAttribArray(3);
     sProgram.Use();
     // std::cout<<"screen_w: "<<screen_w<<std::endl;
-    glUniform1i(glGetUniformLocation(sProgram.ID, "h"), screen_h);
-    glUniform1i(glGetUniformLocation(sProgram.ID, "w"), screen_w);
+    glUniform1f(glGetUniformLocation(sProgram.ID, "h"), screen_h);
+    glUniform1f(glGetUniformLocation(sProgram.ID, "w"), screen_w);
     glDrawArrays(GL_TRIANGLES, 0, draw_N * 3);
 }
 

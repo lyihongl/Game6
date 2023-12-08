@@ -10,7 +10,7 @@ std::size_t Particle::getNextIndex() {
     return std::get<std::vector<bool>>(components).size();
 }
 
-Particle::Particle(const Sprite& sprite, const Quad& quad) : sprite(sprite), quad(quad) {}
+Particle::Particle(const Sprite& sprite, const Quad& quad) : sprite(sprite), quad(quad), count(0) {}
 
 std::size_t Particle::addParticle(const Position2D& position,
                                   const Physics2D& physics, unsigned long long TTL) {

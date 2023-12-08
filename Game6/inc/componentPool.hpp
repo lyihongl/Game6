@@ -10,6 +10,8 @@
 #include "components/physics2d.hpp"
 #include "quad.hpp"
 
+//using TTL = unsigned long long;
+
 // clang-format off
 typedef std::tuple<
     std::vector<Position2D>,
@@ -19,6 +21,7 @@ typedef std::tuple<
     std::vector<Sprite>
 > EntityComponentVectorTuple;
 // clang-format on
+
 
 //void reset_all_at(EntityComponentVectorTuple& pool,
 //                  std::integer_sequence<T, ints...> int_seq, const size_t id) {
